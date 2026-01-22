@@ -2,7 +2,7 @@
 resource "awscc_kendra_index" "genai_kendra_index" {
   count       = var.create_kendra_config && var.kendra_index_arn == null ? 1 : 0
   edition     = var.kendra_index_edition
-  name        = "${random_string.solution_prefix.result}-${var.kendra_index_name}"
+  name        = "${local.solution_prefix}-${var.kendra_index_name}"
   role_arn    = awscc_iam_role.kendra_index_role[0].arn
   description = var.kendra_index_description
   capacity_units = {
@@ -29,7 +29,7 @@ resource "time_sleep" "wait_after_kendra_index_creation" {
 resource "awscc_kendra_data_source" "kendra_s3_data_source" {
   count         = var.create_kendra_s3_data_source == true ? 1 : 0
   index_id      = var.kendra_index_arn != null ? var.kendra_index_arn : awscc_kendra_index.genai_kendra_index[0].id
-  name          = "${random_string.solution_prefix.result}-${var.kendra_data_source_name}"
+  name          = "${local.solution_prefix}-${var.kendra_data_source_name}"
   type          = "S3"
   role_arn      = awscc_iam_role.kendra_s3_datasource_role[0].arn
   language_code = var.kendra_data_source_language_code

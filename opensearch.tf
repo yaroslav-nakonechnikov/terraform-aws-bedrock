@@ -41,7 +41,7 @@ module "oss_knowledgebase" {
 resource "aws_opensearchserverless_access_policy" "updated_data_policy" {
   count = var.create_default_kb ? 1 : 0
 
-  name = "os-access-policy-${random_string.solution_prefix.result}"
+  name = "os-access-policy-${local.solution_prefix}"
   type = "data"
 
   policy = jsonencode([
